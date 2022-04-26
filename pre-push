@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+
+# This is script for pre-push hook. 
+# It runs the tests and checks if it failed.
+# In case of failure, it aborts the push.
+
+# Can be added to other git hooks. Eg: pre-commit
+
+echo "Running unit tests"
+
+npm run test
+
+if [ $? -ne 0 ]; then
+    echo "Unit Tests Failed. Aborting Push"
+	exit 1;
+fi
+
+echo "Running end to end tests"
+
+npm run test:e2e
+
+if [ $? -ne 0 ]; then
+    echo "Integration Tests Failed. Aborting Push"
+	exit 1;
+fi
+
+echo "Test passed, pushing..."
